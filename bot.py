@@ -54,10 +54,11 @@ def shrink(guess, ok):
     for i in range(5):
 
         if ok[i] == 2:
+
             if aux == 0:
                 for element_lst in lst:
-                    # cuvant valid daca contine litera pe pozitia corecta
-                    if guess[i] == element_lst[i] and element_lst.count(guess[i]) >= freq[ord(guess[i]) - 65]:  
+                    if guess[i] == element_lst[i] and element_lst.count(guess[i]) >= freq[
+                        ord(guess[i]) - 65]:  # cuvant valid daca contine litera pe pozitia corecta
                         avb_words.append(element_lst)
                 aux = 1
             else:
@@ -65,9 +66,6 @@ def shrink(guess, ok):
                     if guess[i] != element_lst[i] or element_lst.count(guess[i]) < freq[
                         ord(guess[i]) - 65]:  # sterge cuvantul daca nu contine litera pe pozitia corecta
                         avb_words.remove(element_lst)
-        print(avb_words)
-
-    for i in range(5):
 
         if ok[i] == 1:
             if aux == 0:
@@ -78,21 +76,20 @@ def shrink(guess, ok):
                 aux = 1
             else:
                 for element_lst in reversed(avb_words):
-                    # sterge cuvantul daca fie nu contine litera sau daca o contine si este pe pozitia care ne-a returnat galben
-                    if guess[i] not in element_lst or guess[i] == element_lst[i] or element_lst.count(guess[i]) < freq[ord(guess[i]) - 65]:  
+                    if guess[i] not in element_lst or guess[i] == element_lst[i] or element_lst.count(guess[i]) < freq[
+                        ord(guess[
+                                i]) - 65]:  # sterge cuvantul daca fie nu contine litera sau daca o contine si este pe pozitia care ne-a returnat galben
                         avb_words.remove(element_lst)
-
-    for i in range(5):
 
         if ok[i] == 0:
             if aux == 0:
                 for element_lst in lst:
-                    if guess[i] not in element_lst:  # adauga cuvantul daca nu contine litera care a returnat gri
+                    if (guess[i] in element_lst and freq[ord(guess[i]) - 65] != -1 and guess[i] != element_lst[i]) or guess[i] not in element_lst:  # adauga cuvantul daca nu contine litera care a returnat gri
                         avb_words.append(element_lst)
                 aux = 1
             else:
                 for element_lst in reversed(avb_words):
-                    if guess[i] in element_lst:  # sterge cuvantul daca contine litera care a returnat gri
+                    if guess[i] in element_lst and (freq[ord(guess[i]) - 65] == -1 or element_lst.count(guess[i]) > freq[ord(guess[i]) - 65] or guess[i] == element_lst[i]):  # sterge cuvantul daca contine litera care a returnat gri
                         avb_words.remove(element_lst)
 
 
