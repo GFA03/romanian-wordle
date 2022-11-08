@@ -26,10 +26,25 @@ def frequency(ok, guess, freq):
     for i in range(5):
         if ok[i] > 0:
             freq[ord(guess[i]) - 65] += 1
+    for i in range(5):
+        if ok[i] == 0 and freq[ord(guess[i]) - 65] == 0:
+            freq[ord(guess[i]) - 65] = -1
+
+
+def validation(word, freq):
+    c = 0
+    for x in word:
+        if freq[ord(x) - 65] == 0:
+            c += 1
+    if c == 5:
+        return True
+    else:
+        return False
 
 
 def shrink(guess, ok):
-    avb_words = []  # lista de cuvinte posibile avand in vedere inputul
+    avb_words = []# lista de cuvinte posibile avand in vedere inputul
+    lista2 = []
     aux = 0
     freq = [0] * 26
     frequency(ok, guess, freq)
@@ -39,11 +54,10 @@ def shrink(guess, ok):
     for i in range(5):
 
         if ok[i] == 2:
-
             if aux == 0:
                 for element_lst in lst:
-                    if guess[i] == element_lst[i] and element_lst.count(guess[i]) >= freq[
-                        ord(guess[i]) - 65]:  # cuvant valid daca contine litera pe pozitia corecta
+                    # cuvant valid daca contine litera pe pozitia corecta
+                    if guess[i] == element_lst[i] and element_lst.count(guess[i]) >= freq[ord(guess[i]) - 65]:  
                         avb_words.append(element_lst)
                 aux = 1
             else:
@@ -51,6 +65,7 @@ def shrink(guess, ok):
                     if guess[i] != element_lst[i] or element_lst.count(guess[i]) < freq[
                         ord(guess[i]) - 65]:  # sterge cuvantul daca nu contine litera pe pozitia corecta
                         avb_words.remove(element_lst)
+        print(avb_words)
 
     for i in range(5):
 
@@ -63,9 +78,8 @@ def shrink(guess, ok):
                 aux = 1
             else:
                 for element_lst in reversed(avb_words):
-                    if guess[i] not in element_lst or guess[i] == element_lst[i] or element_lst.count(guess[i]) < freq[
-                        ord(guess[
-                                i]) - 65]:  # sterge cuvantul daca fie nu contine litera sau daca o contine si este pe pozitia care ne-a returnat galben
+                    # sterge cuvantul daca fie nu contine litera sau daca o contine si este pe pozitia care ne-a returnat galben
+                    if guess[i] not in element_lst or guess[i] == element_lst[i] or element_lst.count(guess[i]) < freq[ord(guess[i]) - 65]:  
                         avb_words.remove(element_lst)
 
     for i in range(5):
@@ -80,6 +94,13 @@ def shrink(guess, ok):
                 for element_lst in reversed(avb_words):
                     if guess[i] in element_lst:  # sterge cuvantul daca contine litera care a returnat gri
                         avb_words.remove(element_lst)
+
+
+    for element_lst in lst:
+        if validation(element_lst, freq):
+            lista2.append(element_lst)
+
+    lista2.extend(avb_words)
 
     return avb_words
 
@@ -97,18 +118,18 @@ def calculare_entropie(word):
         S.append(len(avb_words)/11484)
     return entropy(S, base = 2)
 
-f = open("output.txt", "a")
-H = list()
+# f = open("output.txt", "a")
+# H = list()
 '''
 S = [0, 1, 2, 3]
 for i in range(len(S)):
     f.write(str(S[i]) + "\n")'''
 
-for word in ['ABACA', 'ABACE', 'ABALE', 'ABATA', 'ABATE', 'ABATI', 'ABATU', 'ABAUA', 'ABCES', 'ABDIC', 'ABILA']:
-    entropie = calculare_entropie(word)
-    H.append([word, entropie])
+# for word in ['ABACA', 'ABACE', 'ABALE', 'ABATA', 'ABATE', 'ABATI', 'ABATU', 'ABAUA', 'ABCES', 'ABDIC', 'ABILA']:
+#     entropie = calculare_entropie(word)
+#     H.append([word, entropie])
 
-print(H)
+print(shrink("ARARA",[0,2,0,0,0]))
 
 # H.sort(key = lambda x: x[1], reverse = True)
 # for i in range(len(H)):
